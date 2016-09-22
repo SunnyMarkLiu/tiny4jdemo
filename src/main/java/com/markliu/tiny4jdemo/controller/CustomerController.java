@@ -5,6 +5,9 @@ import com.markliu.tiny4j.annotation.Inject;
 import com.markliu.tiny4j.annotation.RequestMapping;
 import com.markliu.tiny4j.annotation.RequestMethod;
 import com.markliu.tiny4j.http.ActionMethodParam;
+import com.markliu.tiny4j.http.Data;
+import com.markliu.tiny4j.http.View;
+import com.markliu.tiny4jdemo.model.Customer;
 import com.markliu.tiny4jdemo.service.CustomerService;
 
 /**
@@ -20,10 +23,22 @@ public class CustomerController {
     private CustomerService customerService;
 
     @RequestMapping(value = "/testMethod", method = {RequestMethod.GET, RequestMethod.POST})
-    public void testMethod(ActionMethodParam param) {
+    public View testMethod(ActionMethodParam param) {
 
         System.out.println("param: " + param);
         customerService.someServiceMethod();
+        View view = new View();
+        view.setViewPath("index.jsp");
+        view.setModelData(null);
+        return view;
+    }
 
+    @RequestMapping(value = "/testMethodData", method = {RequestMethod.GET, RequestMethod.POST})
+    public Data testMethodData(ActionMethodParam param) {
+
+        customerService.someServiceMethod();
+        Data data = new Data();
+        data.setModel(new Customer("Jack", "北京市"));
+        return data;
     }
 }
